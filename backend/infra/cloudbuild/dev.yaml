@@ -19,7 +19,6 @@ steps:
   args:
   - --destination=$_IMAGE_URI:builder
   - --dockerfile=/workspace/backend/infra/Dockerfile
-  - --context-sub-path=./backend
   - --cache=true
   - --cache-ttl=1h
   waitFor: ['setup_env']
