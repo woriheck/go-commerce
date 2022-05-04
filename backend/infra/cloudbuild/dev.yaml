@@ -13,27 +13,17 @@ steps:
         /workspace/backend/app/.env
   # secretEnv: ['']
   waitFor: ['-']
-
-- name: 'gcr.io/kaniko-project/executor:latest'
-  id: builder_image
-  args:
-  - --destination=$_IMAGE_URI:builder
-  - --dockerfile=/workspace/backend/infra/Dockerfile
-  - --context=/workspace/backend
-  - --cache=true
-  - --cache-ttl=1h
-  waitFor: ['setup_env']
   
-# - name: 'gcr.io/cloud-builders/docker'
-#   id: builder_image
-#   args: [
-#     'build',
-#     '--target', 'builder',
-#     '-f', '/workspace/backend/infra/Dockerfile',
-#     '-t', '$_IMAGE_URI:builder',
-#     './backend'
-#   ]
-#   waitFor: ['setup_env']
+- name: 'gcr.io/cloud-builders/docker'
+  id: builder_image
+  args: [
+    'build',
+    '--target', 'builder',
+    '-f', '/workspace/backend/infra/Dockerfile',
+    '-t', '$_IMAGE_URI:builder',
+    './backend'
+  ]
+  waitFor: ['setup_env']
 
 - name: 'gcr.io/cloud-builders/docker'
   id: final_image
@@ -61,6 +51,7 @@ steps:
         --service-account $_SERVICE_ACCOUNT \
         --allow-unauthenticated \
         --quiet
+        
   waitFor: ['push_image']
 
 # options:
