@@ -14,31 +14,31 @@ steps:
   # secretEnv: ['']
   waitFor: ['-']
 
-# - name: 'gcr.io/cloud-builders/docker'
-#   id: builder_image
-#   args: [
-#     'build',
-#     '--target', 'builder',
-#     '-f', 'infra/Dockerfile',
-#     '-t', 'jtb.com/account:builder',
-#     '.'
-#   ]
-#   waitFor: ['setup_env']
+- name: 'gcr.io/cloud-builders/docker'
+  id: builder_image
+  args: [
+    'build',
+    '--target', 'builder',
+    '-f', '/backend/infra/Dockerfile',
+    '-t', 'github.com/woriheck/go-commerce:builder',
+    '.'
+  ]
+  waitFor: ['setup_env']
 
-# - name: 'gcr.io/cloud-builders/docker'
-#   id: final_image
-#   args: [
-#     'build',
-#     '-f', 'infra/Dockerfile.prod',
-#     '-t', '$_IMAGE_URI',
-#     '.'
-#   ]
-#   waitFor: [builder_image]
+- name: 'gcr.io/cloud-builders/docker'
+  id: final_image
+  args: [
+    'build',
+    '-f', '/backend/infra/Dockerfile.prod',
+    '-t', '$_IMAGE_URI',
+    '.'
+  ]
+  waitFor: [builder_image]
 
-# - name: 'gcr.io/cloud-builders/docker'
-#   id: push_image
-#   args: ['push', '$_IMAGE_URI']
-#   waitFor: [final_image]
+- name: 'gcr.io/cloud-builders/docker'
+  id: push_image
+  args: ['push', '$_IMAGE_URI']
+  waitFor: [final_image]
 
 # - name: 'gcr.io/cloud-builders/gcloud-slim'
 #   entrypoint: bash
@@ -60,16 +60,16 @@ steps:
 # options:
 #   dynamic_substitutions: true
 
-# substitutions:
+substitutions:
 #     _CLOUD_SQL_CONNECTION: ${PROJECT_ID}:asia-northeast1:dev-jtb-b2b
-#     _IMAGE_URI: gcr.io/${PROJECT_ID}/${_SERVICE_NAME}:${SHORT_SHA}
+    _IMAGE_URI: gcr.io/${PROJECT_ID}/${_SERVICE_NAME}:${SHORT_SHA}
 #     _GITHUB_BUCKET: jtb-b2b-account-github
 #     _REGION: asia-northeast1
 #     _SERVICE_ACCOUNT: dev-account-cloudrun-app@${PROJECT_ID}.iam.gserviceaccount.com
 
     # Set this value on cloud trigger to create a separate environment for dev
     # APP_ENV: dev
-    # _SERVICE_NAME: beta-jtb-account
+    _SERVICE_NAME: go-commerce
 
 # availableSecrets:
 #   secretManager:
