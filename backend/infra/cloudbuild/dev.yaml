@@ -10,7 +10,7 @@ steps:
       cp /workspace/backend/infra/.env.$_APP_ENV /workspace/backend/app/.env
       sed -i \
         -e "s|APP_ENV=|APP_ENV=$$_APP_ENV|g" \
-        /workspace/src/.env
+        /workspace/backend/app/.env
   # secretEnv: ['']
   waitFor: ['-']
 
