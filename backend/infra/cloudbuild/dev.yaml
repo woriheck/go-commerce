@@ -49,6 +49,7 @@ steps:
         --region $_REGION \
         --image $_IMAGE_URI:${SHORT_SHA} \
         --service-account $_SERVICE_ACCOUNT \
+        --min-instances 1 \
         --allow-unauthenticated \
         --quiet
         
