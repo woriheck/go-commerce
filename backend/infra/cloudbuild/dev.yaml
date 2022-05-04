@@ -14,16 +14,26 @@ steps:
   # secretEnv: ['']
   waitFor: ['-']
 
-- name: 'gcr.io/cloud-builders/docker'
+- name: 'gcr.io/kaniko-project/executor:latest'
   id: builder_image
-  args: [
-    'build',
-    '--target', 'builder',
-    '-f', '/workspace/backend/infra/Dockerfile',
-    '-t', '$_IMAGE_URI:builder',
-    './backend'
-  ]
+  args:
+  - --destination=$_IMAGE_URI:builder
+  - --dockerfile=/workspace/backend/infra/Dockerfile
+  - --context-sub-path=./build
+  - --cache=true
+  - --cache-ttl=1h
   waitFor: ['setup_env']
+  
+# - name: 'gcr.io/cloud-builders/docker'
+#   id: builder_image
+#   args: [
+#     'build',
+#     '--target', 'builder',
+#     '-f', '/workspace/backend/infra/Dockerfile',
+#     '-t', '$_IMAGE_URI:builder',
+#     './backend'
+#   ]
+#   waitFor: ['setup_env']
 
 - name: 'gcr.io/cloud-builders/docker'
   id: final_image
