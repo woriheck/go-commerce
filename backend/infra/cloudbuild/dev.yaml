@@ -11,7 +11,7 @@ steps:
       sed -i \
         -e "s|APP_ENV=|APP_ENV=$$_APP_ENV|g" \
         /workspace/src/.env
-  secretEnv: ['']
+  # secretEnv: ['']
   waitFor: ['-']
 
 # - name: 'gcr.io/cloud-builders/docker'
