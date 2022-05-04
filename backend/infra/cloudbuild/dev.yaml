@@ -19,9 +19,9 @@ steps:
   args: [
     'build',
     '--target', 'builder',
-    '-f', '/workspace/backend/infra/Dockerfile',
+    '-f', 'infra/Dockerfile',
     '-t', 'github.com/woriheck/go-commerce:builder',
-    '.'
+    './backend'
   ]
   waitFor: ['setup_env']
 
@@ -29,9 +29,9 @@ steps:
   id: final_image
   args: [
     'build',
-    '-f', '/workspace/backend/infra/Dockerfile.prod',
+    '-f', 'infra/Dockerfile.prod',
     '-t', '$_IMAGE_URI',
-    '.'
+    './backend'
   ]
   waitFor: [builder_image]
 

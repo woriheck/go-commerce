@@ -8,11 +8,11 @@ WORKDIR /app
 
 # Retrieve application dependencies using go modules.
 # Allows container builds to reuse downloaded dependencies.
-COPY ../app/go.* ./
+COPY go.* ./
 RUN go mod download
 
 # Copy local code to the container image.
-COPY ../app ./
+COPY ./app ./
 
 # Build the binary.
 # -mod=readonly ensures immutable go.mod and go.sum in container builds.
