@@ -60,7 +60,7 @@ steps:
 # options:
 #   dynamic_substitutions: true
 
-substitutions:
+# substitutions:
 #     _CLOUD_SQL_CONNECTION: ${PROJECT_ID}:asia-northeast1:dev-jtb-b2b
 #     _IMAGE_URI: gcr.io/${PROJECT_ID}/${_SERVICE_NAME}:${SHORT_SHA}
 #     _GITHUB_BUCKET: jtb-b2b-account-github
@@ -68,7 +68,7 @@ substitutions:
 #     _SERVICE_ACCOUNT: dev-account-cloudrun-app@${PROJECT_ID}.iam.gserviceaccount.com
 
     # Set this value on cloud trigger to create a separate environment for dev
-    APP_ENV: dev
+    # APP_ENV: dev
     # _SERVICE_NAME: beta-jtb-account
 
 # availableSecrets:
