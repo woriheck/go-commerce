@@ -47,7 +47,7 @@ steps:
     - |
       gcloud run deploy $_APP_ENV-$_SERVICE_NAME \
         --region $_REGION \
-        --image $_IMAGE_URI \
+        --image $_IMAGE_URI:${SHORT_SHA} \
         --service-account $_SERVICE_ACCOUNT \
         --allow-unauthenticated \
         --quiet
