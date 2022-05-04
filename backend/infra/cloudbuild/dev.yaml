@@ -19,7 +19,7 @@ steps:
   args: [
     'build',
     '--target', 'builder',
-    '-f', 'backend/infra/Dockerfile',
+    '-f', '/workspace/backend/infra/Dockerfile',
     '-t', 'github.com/woriheck/go-commerce:builder',
     '.'
   ]
@@ -29,7 +29,7 @@ steps:
   id: final_image
   args: [
     'build',
-    '-f', 'backend/infra/Dockerfile.prod',
+    '-f', '/workspace/backend/infra/Dockerfile.prod',
     '-t', '$_IMAGE_URI',
     '.'
   ]
