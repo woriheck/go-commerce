@@ -62,7 +62,7 @@ substitutions:
     _IMAGE_URI: gcr.io/${PROJECT_ID}/${_SERVICE_NAME}
 #     _GITHUB_BUCKET: jtb-b2b-account-github
     _REGION: asia-southeast1-a
-#     _SERVICE_ACCOUNT: dev-account-cloudrun-app@${PROJECT_ID}.iam.gserviceaccount.com
+    _SERVICE_ACCOUNT: run-backend@go-commerce-349201.iam.gserviceaccount.com
 
     # Set this value on cloud trigger to create a separate environment for dev
     # APP_ENV: dev
