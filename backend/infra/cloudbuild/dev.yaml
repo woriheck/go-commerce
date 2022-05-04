@@ -69,7 +69,7 @@ substitutions:
 
     # Set this value on cloud trigger to create a separate environment for dev
     # APP_ENV: dev
-    _SERVICE_NAME: go-commerce
+    _SERVICE_NAME: backend
 
 # availableSecrets:
 #   secretManager:
