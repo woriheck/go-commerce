@@ -44,10 +44,21 @@ steps:
     - |
       mkdir -p $$HOST_DIR/.out
       docker run --tty --network=cloudbuild -v $$HOST_DIR:$$CONTAINER_DIR $_IMAGE_URI:builder go test ./... --count=1 --coverprofile $$CONTAINER_DIR/.out/coverage.log
+      docker run -v $$HOST_DIR:$$CONTAINER_DIR $_IMAGE_URI:builder $$CONTAINER_DIR/coverage.sh
   env:
     - 'HOST_DIR=/workspace/backend/infra/github'
     - 'CONTAINER_DIR=/app/infra/github'
   waitFor: ['builder_image']
+  
+- name: 'gcr.io/cloud-builders/gsutil'
+  id: upload_testing_coverage_result
+  entrypoint: /bin/bash
+  args:
+    - -c
+    - |
+      gsutil -q -h "Cache-Control: no-store, max-age=0" cp /workspace/backend/infra/github/.out/coverage.svg gs://$_GITHUB_BUCKET/coverage.svg
+      gsutil -q acl ch -u AllUsers:R gs://$_GITHUB_BUCKET/coverage.svg
+  waitFor: ['auto_testing']
 
 - name: 'gcr.io/cloud-builders/docker'
   id: push_image
@@ -74,7 +85,7 @@ steps:
 substitutions:
 #     _CLOUD_SQL_CONNECTION: ${PROJECT_ID}:asia-northeast1:dev-jtb-b2b
     _IMAGE_URI: gcr.io/${PROJECT_ID}/${_SERVICE_NAME}
-#     _GITHUB_BUCKET: jtb-b2b-account-github
+    _GITHUB_BUCKET: go-commerce-github
     _REGION: asia-southeast1
     _SERVICE_ACCOUNT: run-backend@go-commerce-349201.iam.gserviceaccount.com
 
