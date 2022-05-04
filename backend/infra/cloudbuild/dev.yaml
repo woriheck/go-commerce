@@ -61,7 +61,6 @@ steps:
         --service-account $_SERVICE_ACCOUNT \
         --allow-unauthenticated \
         --quiet
-        
   waitFor: ['push_image']
 
 # options:
