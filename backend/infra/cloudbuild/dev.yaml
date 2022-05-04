@@ -36,6 +36,20 @@ steps:
   waitFor: [builder_image]
 
 - name: 'gcr.io/cloud-builders/docker'
+  id: auto_testing
+  entrypoint: /bin/bash
+  args:
+    - -e
+    - -c
+    - |
+      mkdir -p $$HOST_DIR/.out
+      docker run --tty --network=cloudbuild -v $$HOST_DIR:$$CONTAINER_DIR $_IMAGE_URI:builder go test ./... --count=1 --coverprofile $$CONTAINER_DIR/.out/coverage.log
+  env:
+    - 'HOST_DIR=/workspace/backend/infra/github'
+    - 'CONTAINER_DIR=/app/infra/github'
+  waitFor: ['builder_image']
+
+- name: 'gcr.io/cloud-builders/docker'
   id: push_image
   args: ['push', '$_IMAGE_URI']
   waitFor: [final_image]
