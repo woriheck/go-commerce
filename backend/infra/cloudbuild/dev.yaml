@@ -45,7 +45,7 @@ steps:
   args:
     - -c
     - |
-      gcloud run deploy $_APP_ENV-$_SERVICE_NAME \
+      gcloud run deploy $_SERVICE_NAME \
         --region $_REGION \
         --image $_IMAGE_URI \
         --service-account $_SERVICE_ACCOUNT \
