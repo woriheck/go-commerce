@@ -20,7 +20,7 @@ steps:
     'build',
     '--target', 'builder',
     '-f', '/workspace/backend/infra/Dockerfile',
-    '-t', '$_IMAGE_URI:${builder}',
+    '-t', '$_IMAGE_URI:builder',
     './backend'
   ]
   waitFor: ['setup_env']
