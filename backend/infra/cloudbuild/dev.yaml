@@ -61,7 +61,7 @@ substitutions:
 #     _CLOUD_SQL_CONNECTION: ${PROJECT_ID}:asia-northeast1:dev-jtb-b2b
     _IMAGE_URI: gcr.io/${PROJECT_ID}/${_SERVICE_NAME}
 #     _GITHUB_BUCKET: jtb-b2b-account-github
-    _REGION: asia-southeast1-a
+    _REGION: asia-southeast1
     _SERVICE_ACCOUNT: run-backend@go-commerce-349201.iam.gserviceaccount.com
 
     # Set this value on cloud trigger to create a separate environment for dev
