@@ -40,22 +40,19 @@ steps:
   args: ['push', '$_IMAGE_URI']
   waitFor: [final_image]
 
-# - name: 'gcr.io/cloud-builders/gcloud-slim'
-#   entrypoint: bash
-#   args:
-#     - -c
-#     - |
-#       gcloud run deploy $_SERVICE_NAME \
-#         --region $_REGION \
-#         --image $_IMAGE_URI \
-#         --service-account $_SERVICE_ACCOUNT \
-#         --add-cloudsql-instances $_CLOUD_SQL_CONNECTION \
-#         --allow-unauthenticated \
-#         --vpc-connector=default-vpc-connector \
-#         --vpc-egress=all-traffic \
-#         --quiet
+- name: 'gcr.io/cloud-builders/gcloud-slim'
+  entrypoint: bash
+  args:
+    - -c
+    - |
+      gcloud run deploy $_SERVICE_NAME \
+        --region $_REGION \
+        --image $_IMAGE_URI \
+        --service-account $_SERVICE_ACCOUNT \
+        --allow-unauthenticated \
+        --quiet
         
-#   waitFor: ['push_image']
+  waitFor: ['push_image']
 
 # options:
 #   dynamic_substitutions: true
@@ -64,7 +61,7 @@ substitutions:
 #     _CLOUD_SQL_CONNECTION: ${PROJECT_ID}:asia-northeast1:dev-jtb-b2b
     _IMAGE_URI: gcr.io/${PROJECT_ID}/${_SERVICE_NAME}
 #     _GITHUB_BUCKET: jtb-b2b-account-github
-#     _REGION: asia-northeast1
+    _REGION: asia-southeast1-a
 #     _SERVICE_ACCOUNT: dev-account-cloudrun-app@${PROJECT_ID}.iam.gserviceaccount.com
 
     # Set this value on cloud trigger to create a separate environment for dev
