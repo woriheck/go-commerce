@@ -10,8 +10,9 @@ produces:
   - application/json
 x-google-backend:
   address: https://dev-backend-bprvtpcz2a-as.a.run.app
+basePath: /products
 paths:
-  /products:
+  /:
     get:
       summary: Hi Product
       operationId: hello-product
