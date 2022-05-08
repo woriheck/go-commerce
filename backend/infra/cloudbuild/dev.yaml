@@ -13,7 +13,7 @@ steps:
         /workspace/backend/app/.env
   # secretEnv: ['']
   waitFor: ['-']
-  
+
 - name: 'gcr.io/cloud-builders/docker'
   id: builder_image
   args: [
@@ -49,7 +49,7 @@ steps:
     - 'HOST_DIR=/workspace/backend/infra/github'
     - 'CONTAINER_DIR=/app/infra/github'
   waitFor: ['builder_image']
-  
+
 - name: 'gcr.io/cloud-builders/gsutil'
   id: upload_testing_coverage_result
   entrypoint: /bin/bash
@@ -76,7 +76,7 @@ steps:
         --service-account $_SERVICE_ACCOUNT \
         --allow-unauthenticated \
         --quiet
-        
+
   waitFor: ['push_image']
 
 # options:
