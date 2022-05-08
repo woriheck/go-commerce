@@ -8,13 +8,20 @@ schemes:
   - https
 produces:
   - application/json
+x-google-backend:
+  address: https://dev-backend-bprvtpcz2a-as.a.run.app
 paths:
   /products:
     get:
       summary: Hi Product
       operationId: hello-product
-      x-google-backend:
-        address: https://dev-backend-bprvtpcz2a-as.a.run.app
+      responses:
+        '200':
+          description: OK
+  /phone:
+    get:
+      summary: Hi Phone
+      operationId: hello-phone
       responses:
         '200':
           description: OK
