@@ -5,8 +5,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 
+	"github.com/joho/godotenv"
 	"google.golang.org/api/idtoken"
 )
 
@@ -20,11 +22,19 @@ type Response struct {
 }
 
 func HelloProduct(w http.ResponseWriter, r *http.Request) {
-	targetURL := "https://dev-backend-bprvtpcz2a-as.a.run.app/pricing"
-	audience := "https://dev-backend-bprvtpcz2a-as.a.run.app/url"
-	makeGetRequest(w, targetURL, audience)
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
 
-	jsonOut, _ := json.Marshal(Response{Message: "Hello Product"})
+	targetURL := "https://dev-backend-bprvtpcz2a-as.a.run.app/"
+	audience := "https://dev-backend-bprvtpcz2a-as.a.run.app/"
+	err = makeGetRequest(w, targetURL, audience)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	jsonOut, _ := json.Marshal(Response{Message: "Hello HAHA"})
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(200)
 	fmt.Fprintf(w, "%s", jsonOut)
@@ -49,9 +59,18 @@ func makeGetRequest(w io.Writer, targetURL string, audience string) error {
 		return fmt.Errorf("client.Get: %v", err)
 	}
 	defer resp.Body.Close()
-	if _, err := io.Copy(w, resp.Body); err != nil {
-		return fmt.Errorf("io.Copy: %v", err)
+	// if _, err := io.Copy(w, resp.Body); err != nil {
+	// 	return fmt.Errorf("io.Copy: %v", err)
+	// }
+
+	bodyBytes, err := io.ReadAll(resp.Body)
+	if err != nil {
+		log.Fatal(err)
 	}
+
+	fmt.Println("DATA IS")
+	bodyString := string(bodyBytes)
+	fmt.Println(bodyString)
 
 	return nil
 }
