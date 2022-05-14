@@ -10,7 +10,6 @@ produces:
   - application/json
 x-google-backend:
   address: https://dev-backend-bprvtpcz2a-as.a.run.app
-basePath: /products
 paths:
   /:
     get:
@@ -19,10 +18,12 @@ paths:
       responses:
         '200':
           description: OK
-  /phone:
+  /phone2:
     get:
       summary: Hi Phone
       operationId: hello-phone
+      x-google-backend:
+        address: https://dev-backend-bprvtpcz2a-as.a.run.app/phone
       responses:
         '200':
           description: OK
