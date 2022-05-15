@@ -1,0 +1,2 @@
+backend/services/product/app/product-cloudrun-svc-acc.json
+backend/services/product/app/.env

@@ -40,6 +40,10 @@ func HelloProduct(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "%s", jsonOut)
 }
 
+type APIResponse struct {
+	Message string `json:"message"`
+}
+
 // `makeGetRequest` makes a request to the provided `targetURL`
 // with an authenticated client using audience `audience`.
 func makeGetRequest(w io.Writer, targetURL string, audience string) error {
@@ -68,9 +72,11 @@ func makeGetRequest(w io.Writer, targetURL string, audience string) error {
 		log.Fatal(err)
 	}
 
+	var p APIResponse
+	err = json.Unmarshal(bodyBytes, &p)
+
 	fmt.Println("DATA IS")
-	bodyString := string(bodyBytes)
-	fmt.Println(bodyString)
+	fmt.Println(p.Message)
 
 	return nil
 }
