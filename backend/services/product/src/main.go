@@ -37,7 +37,6 @@ var (
 func HelloProduct(w http.ResponseWriter, r *http.Request) {
 	err := godotenv.Load()
 	if err != nil {
-		fmt.Println("ENV LOAD")
 		log.Fatalf("Error loading .env file: %v", err)
 	}
 
@@ -77,6 +76,9 @@ func callRPC() string {
 	if err != nil {
 		log.Fatalf("TokenSource.Token: %v", err)
 	}
+	fmt.Println("TOKEN START")
+	fmt.Println(token)
+	fmt.Println("TOKEN END")
 
 	c := pb.NewGreeterClient(conn)
 

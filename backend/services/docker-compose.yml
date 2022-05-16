@@ -10,6 +10,7 @@ services:
       - '50051'
     volumes:
       - ./pricing/src:/app/src
+      - ./docker-entrypoint.sh:/app/docker-entrypoint.sh
     networks:
       - go-commerce-network
 
@@ -23,6 +24,7 @@ services:
       - '3000:8080'
     volumes:
       - ./product/src:/app/src
+      - ./docker-entrypoint.sh:/app/docker-entrypoint.sh
     networks:
       - go-commerce-network
 
