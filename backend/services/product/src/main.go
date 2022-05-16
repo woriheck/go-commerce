@@ -2,6 +2,8 @@ package main
 
 import (
 	"context"
+	"crypto/tls"
+	"crypto/x509"
 	"encoding/json"
 	"flag"
 	"fmt"
@@ -12,6 +14,7 @@ import (
 	"github.com/joho/godotenv"
 	pb "github.com/woriheck/go-commerce/shared/pricing"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/credentials/insecure"
 )
 
@@ -23,6 +26,11 @@ func main() {
 type Response struct {
 	Message string `json:"message"`
 }
+
+var (
+	addr = flag.String("addr", "dev-pricing-bprvtpcz2a-as.a.run.app:443", "the address to connect to")
+	name = flag.String("name", defaultName, "Name to greet")
+)
 
 func HelloProduct(w http.ResponseWriter, r *http.Request) {
 	err := godotenv.Load()
@@ -42,19 +50,20 @@ const (
 	defaultName = "world"
 )
 
-var (
-	addr = flag.String("addr", "grpc:50051", "the address to connect to")
-	name = flag.String("name", defaultName, "Name to greet")
-)
-
 func callRPC() string {
 	flag.Parse()
-	// Set up a connection to the server.
-	conn, err := grpc.Dial(*addr, grpc.WithTransportCredentials(insecure.NewCredentials()))
+
+	conn, err := NewConn(*addr, false)
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
 	defer conn.Close()
+	// // Set up a connection to the server.
+	// conn, err := grpc.Dial(*addr, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	// if err != nil {
+	// 	log.Fatalf("did not connect: %v", err)
+	// }
+	// defer conn.Close()
 	c := pb.NewGreeterClient(conn)
 
 	// Contact the server and print out its response.
@@ -66,4 +75,28 @@ func callRPC() string {
 	}
 
 	return fmt.Sprintf("Greeting %s", r.GetMessage())
+}
+
+// NewConn creates a new gRPC connection.
+// host should be of the form domain:port, e.g., example.com:443
+func NewConn(host string, insecureBool bool) (*grpc.ClientConn, error) {
+	var opts []grpc.DialOption
+	if host != "" {
+		opts = append(opts, grpc.WithAuthority(host))
+	}
+
+	if insecureBool {
+		opts = append(opts, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	} else {
+		systemRoots, err := x509.SystemCertPool()
+		if err != nil {
+			return nil, err
+		}
+		cred := credentials.NewTLS(&tls.Config{
+			RootCAs: systemRoots,
+		})
+		opts = append(opts, grpc.WithTransportCredentials(cred))
+	}
+
+	return grpc.Dial(host, opts...)
 }
