@@ -16,7 +16,7 @@ steps:
     'build',
     '-f', '/workspace/backend/services/pricing/Dockerfile.prod',
     '-t', '$_IMAGE_URI:${SHORT_SHA}',
-    './workspace/backend/services'
+    '/workspace/backend/services'
   ]
   waitFor: [builder_image]
 
