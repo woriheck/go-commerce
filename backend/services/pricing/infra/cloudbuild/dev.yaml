@@ -22,7 +22,7 @@ steps:
 
 - name: 'gcr.io/cloud-builders/docker'
   id: push_image
-  args: ['push', '$_IMAGE_URI']
+  args: ['push', '$_IMAGE_URI:${SHORT_SHA}']
   waitFor: [final_image]
 
 - name: 'gcr.io/cloud-builders/gcloud-slim'
