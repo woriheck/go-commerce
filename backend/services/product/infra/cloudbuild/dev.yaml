@@ -35,6 +35,7 @@ steps:
         --image $_IMAGE_URI:${SHORT_SHA} \
         --service-account $_SERVICE_ACCOUNT \
         --allow-unauthenticated \
+        --no-use-http2 \
         --quiet
   waitFor: ['push_image']
 
