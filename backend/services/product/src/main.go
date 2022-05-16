@@ -67,7 +67,7 @@ func callRPC() string {
 	// Create an identity token.
 	// With a global TokenSource tokens would be reused and auto-refreshed at need.
 	// A given TokenSource is specific to the audience.
-	audience := "dev-pricing-bprvtpcz2a-as.a.run.app"
+	audience := "https://dev-pricing-bprvtpcz2a-as.a.run.app/"
 	tokenSource, err := idtoken.NewTokenSource(ctx, audience)
 	if err != nil {
 		log.Fatalf("idtoken.NewTokenSource: %v", err)
