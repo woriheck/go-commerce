@@ -7,7 +7,7 @@ steps:
     '--target', 'builder',
     '-f', '/workspace/backend/services/pricing/Dockerfile',
     '-t', '$_IMAGE_URI:builder',
-    './backend'
+    '/workspace/backend/services'
   ]
 
 - name: 'gcr.io/cloud-builders/docker'
@@ -16,7 +16,7 @@ steps:
     'build',
     '-f', '/workspace/backend/services/pricing/Dockerfile.prod',
     '-t', '$_IMAGE_URI:${SHORT_SHA}',
-    './backend'
+    './workspace/backend/services'
   ]
   waitFor: [builder_image]
 

@@ -9,13 +9,13 @@ WORKDIR /app
 # Retrieve application dependencies using go modules.
 # Allows container builds to reuse downloaded dependencies.
 
-COPY ../go.* ./
+COPY go.* ./
 RUN go mod download
 
 # Copy local code to the container image.
-COPY ../docker-entrypoint.sh .
-COPY ../src ./src
-COPY ../shared ./shared
+COPY ./pricing/src ./src
+COPY ./pricing/src ./src
+COPY ./shared ./shared
 
 # Build the binary.
 # -mod=readonly ensures immutable go.mod and go.sum in container builds.
