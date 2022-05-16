@@ -35,7 +35,6 @@ steps:
         --image $_IMAGE_URI:${SHORT_SHA} \
         --service-account $_SERVICE_ACCOUNT \
         --quiet
-
   waitFor: ['push_image']
 
 substitutions:
