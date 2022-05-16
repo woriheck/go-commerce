@@ -1,0 +1,31 @@
+version: "3"
+services:
+  grpc:
+    # container_name: go-commerce.pricing
+    build:
+      context: ./
+      dockerfile: ./pricing/Dockerfile
+    entrypoint: /app/docker-entrypoint.sh
+    ports:
+      - '50051'
+    volumes:
+      - ./pricing/src:/app/src
+    networks:
+      - go-commerce-network
+
+  go-commerce.product:
+    # container_name: go-commerce.product
+    build:
+      context: ./
+      dockerfile: ./product/Dockerfile
+    entrypoint: /app/docker-entrypoint.sh
+    ports:
+      - '3000:8080'
+    volumes:
+      - ./product/src:/app/src
+    networks:
+      - go-commerce-network
+
+networks:
+  go-commerce-network:
+      driver: bridge

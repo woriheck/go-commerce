@@ -1,0 +1,47 @@
+steps:
+
+- name: 'gcr.io/cloud-builders/docker'
+  id: builder_image
+  args: [
+    'build',
+    '--target', 'builder',
+    '-f', '/workspace/backend/services/pricing/Dockerfile',
+    '-t', '$_IMAGE_URI:builder',
+    './backend'
+  ]
+  waitFor: ['setup_env']
+
+- name: 'gcr.io/cloud-builders/docker'
+  id: final_image
+  args: [
+    'build',
+    '-f', '/workspace/backend/services/pricing/Dockerfile.prod',
+    '-t', '$_IMAGE_URI:${SHORT_SHA}',
+    './backend'
+  ]
+  waitFor: [builder_image]
+
+- name: 'gcr.io/cloud-builders/docker'
+  id: push_image
+  args: ['push', '$_IMAGE_URI']
+  waitFor: [final_image]
+
+- name: 'gcr.io/cloud-builders/gcloud-slim'
+  entrypoint: bash
+  args:
+    - -c
+    - |
+      gcloud run deploy $_APP_ENV-$_SERVICE_NAME \
+        --region $_REGION \
+        --image $_IMAGE_URI:${SHORT_SHA} \
+        --service-account $_SERVICE_ACCOUNT \
+        --quiet
+
+  waitFor: ['push_image']
+
+substitutions:
+    _IMAGE_URI: gcr.io/${PROJECT_ID}/${_SERVICE_NAME}
+    _GITHUB_BUCKET: go-commerce-github
+    _REGION: asia-southeast1
+    _SERVICE_ACCOUNT: run-pricing@go-commerce-349201.iam.gserviceaccount.com
+    _SERVICE_NAME: pricing
