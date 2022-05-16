@@ -34,6 +34,7 @@ steps:
         --region $_REGION \
         --image $_IMAGE_URI:${SHORT_SHA} \
         --service-account $_SERVICE_ACCOUNT \
+        --use-http2
         --quiet
   waitFor: ['push_image']
 
