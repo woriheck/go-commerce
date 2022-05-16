@@ -23,7 +23,6 @@ steps:
   ]
   waitFor: ['-']
 
-
 - name: 'gcr.io/cloud-builders/docker'
   id: final_image
   args: [
@@ -32,7 +31,7 @@ steps:
     '-t', '$_IMAGE_URI:${SHORT_SHA}',
     '/workspace/backend/services'
   ]
-  waitFor: [setup_env]
+  waitFor: [builder_image]
 
 - name: 'gcr.io/cloud-builders/docker'
   id: push_image
