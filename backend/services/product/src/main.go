@@ -35,7 +35,7 @@ var (
 func HelloProduct(w http.ResponseWriter, r *http.Request) {
 	err := godotenv.Load()
 	if err != nil {
-		log.Fatal("Error loading .env file")
+		log.Fatalf("Error loading .env file: %v", err)
 	}
 
 	msg := callRPC()
