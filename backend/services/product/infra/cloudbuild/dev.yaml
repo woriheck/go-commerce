@@ -6,7 +6,7 @@ steps:
     - -e
     - -c
     - |
-      cp /workspace/backend/infra/.env.$_APP_ENV /workspace/backend/app/.env
+      cp /workspace/backend/infra/.env.$_APP_ENV /workspace/backend/services/product/src/.env
       sed -i \
         -e "s|APP_ENV=|APP_ENV=$$_APP_ENV|g" \
         /workspace/backend/services/product/src/.env
