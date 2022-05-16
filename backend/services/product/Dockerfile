@@ -13,8 +13,7 @@ COPY go.* ./
 RUN go mod download
 
 # Copy local code to the container image.
-COPY ../docker-entrypoint.sh .
-COPY ./pricing/src ./src
+COPY ./product/src ./src
 COPY ./shared ./shared
 
 # Build the binary.

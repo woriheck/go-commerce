@@ -14,7 +14,6 @@ RUN go mod download
 
 # Copy local code to the container image.
 COPY ./pricing/src ./src
-COPY ./pricing/src ./src
 COPY ./shared ./shared
 
 # Build the binary.
