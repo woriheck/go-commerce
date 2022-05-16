@@ -13,9 +13,11 @@ import (
 
 	"github.com/joho/godotenv"
 	pb "github.com/woriheck/go-commerce/shared/pricing"
+	"google.golang.org/api/idtoken"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/credentials/insecure"
+	grpcMetadata "google.golang.org/grpc/metadata"
 )
 
 func main() {
@@ -59,16 +61,28 @@ func callRPC() string {
 		log.Fatalf("did not connect: %v", err)
 	}
 	defer conn.Close()
-	// // Set up a connection to the server.
-	// conn, err := grpc.Dial(*addr, grpc.WithTransportCredentials(insecure.NewCredentials()))
-	// if err != nil {
-	// 	log.Fatalf("did not connect: %v", err)
-	// }
-	// defer conn.Close()
+
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
+
+	// Create an identity token.
+	// With a global TokenSource tokens would be reused and auto-refreshed at need.
+	// A given TokenSource is specific to the audience.
+	audience := "dev-pricing-bprvtpcz2a-as.a.run.app"
+	tokenSource, err := idtoken.NewTokenSource(ctx, audience)
+	if err != nil {
+		log.Fatalf("idtoken.NewTokenSource: %v", err)
+	}
+	token, err := tokenSource.Token()
+	if err != nil {
+		log.Fatalf("TokenSource.Token: %v", err)
+	}
+
 	c := pb.NewGreeterClient(conn)
 
 	// Contact the server and print out its response.
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	// ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	ctx = grpcMetadata.AppendToOutgoingContext(ctx, "authorization", "Bearer "+token.AccessToken)
 	defer cancel()
 	r, err := c.SayHello(ctx, &pb.HelloRequest{Name: name})
 	if err != nil {
