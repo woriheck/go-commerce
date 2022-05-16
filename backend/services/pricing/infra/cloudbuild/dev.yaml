@@ -9,7 +9,6 @@ steps:
     '-t', '$_IMAGE_URI:builder',
     './backend'
   ]
-  waitFor: ['setup_env']
 
 - name: 'gcr.io/cloud-builders/docker'
   id: final_image
