@@ -76,9 +76,6 @@ func callRPC() string {
 	if err != nil {
 		log.Fatalf("TokenSource.Token: %v", err)
 	}
-	fmt.Println("TOKEN START")
-	fmt.Println(token)
-	fmt.Println("TOKEN END")
 
 	c := pb.NewGreeterClient(conn)
 

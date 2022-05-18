@@ -1,3 +1,4 @@
 .DS_Store
 backend/services/product/src/product-cloudrun-svc-acc.json
 backend/services/product/src/.env
+backend/services/product/src/server
