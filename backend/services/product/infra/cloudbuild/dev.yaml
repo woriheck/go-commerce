@@ -1,0 +1,60 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  id: setup_env
+  entrypoint: bash
+  args:
+    - -e
+    - -c
+    - |
+      cp /workspace/backend/infra/.env.$_APP_ENV /workspace/backend/services/product/src/.env
+      sed -i \
+        -e "s|APP_ENV=|APP_ENV=$$_APP_ENV|g" \
+        /workspace/backend/services/product/src/.env
+  waitFor: ['-']
+
+- name: 'gcr.io/cloud-builders/docker'
+  id: builder_image
+  args: [
+    'build',
+    '--target', 'builder',
+    '-f', '/workspace/backend/services/product/Dockerfile',
+    '-t', '$_IMAGE_URI:builder',
+    '/workspace/backend/services'
+  ]
+  waitFor: ['-']
+
+- name: 'gcr.io/cloud-builders/docker'
+  id: final_image
+  args: [
+    'build',
+    '-f', '/workspace/backend/services/product/Dockerfile.prod',
+    '-t', '$_IMAGE_URI:${SHORT_SHA}',
+    '/workspace/backend/services'
+  ]
+  waitFor: [builder_image]
+
+- name: 'gcr.io/cloud-builders/docker'
+  id: push_image
+  args: ['push', '$_IMAGE_URI:${SHORT_SHA}']
+  waitFor: [final_image]
+
+- name: 'gcr.io/cloud-builders/gcloud-slim'
+  entrypoint: bash
+  args:
+    - -c
+    - |
+      gcloud run deploy $_APP_ENV-$_SERVICE_NAME \
+        --region $_REGION \
+        --image $_IMAGE_URI:${SHORT_SHA} \
+        --service-account $_SERVICE_ACCOUNT \
+        --allow-unauthenticated \
+        --no-use-http2 \
+        --quiet
+  waitFor: ['push_image']
+
+substitutions:
+    _IMAGE_URI: gcr.io/${PROJECT_ID}/${_SERVICE_NAME}
+    _GITHUB_BUCKET: go-commerce-github
+    _REGION: asia-southeast1
+    _SERVICE_ACCOUNT: run-product@go-commerce-349201.iam.gserviceaccount.com
+    _SERVICE_NAME: product
